@@ -1,21 +1,44 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+import "./globals.scss";
+import type { Metadata } from "next";
+import Image from "next/image";
+
+
+
+
 
 export const metadata: Metadata = {
-  title: 'Aranhaverso',
-  description: 'Parallax do Aranhaverso com React, Next.js',
-}
+  title: "Aranhaverso",
+  description: "Parallax do Aranhaverso com React, Next.js",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        <header>
+          <Image
+            src="/icons/menu.svg"
+            alt="opções do menu"
+            width={36}
+            height={25}
+          />
+
+          <Image
+            src="/spider-logo.svg"
+            alt={""}
+            width={260}
+            height={70}
+          />
+
+          <Image src="/icons/user.svg" alt={""} width={36} height={25} />
+        </header>
+        <body>{children}</body>
+      </body>
     </html>
-  )
+  );
 }
