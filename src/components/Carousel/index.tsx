@@ -40,23 +40,21 @@ export default function Carousel({ heroes, activedId }: Iprops) {
     setVisibleItems(visibleItems);
   }, [heroes, activeIndex]);
 
-
   useEffect(() => {
-    const htmlEl = document.querySelector("html")
+    const htmlEl = document.querySelector("html");
     if (!htmlEl || !visibleItems) {
       return;
     }
 
-    const currentHeroId = visibleItems[enPosition.MIDDLE].id
+    const currentHeroId = visibleItems[enPosition.MIDDLE].id;
     htmlEl.style.backgroundImage = `url("/spiders/${currentHeroId}-background.png")`;
     htmlEl.classList.add("hero-page");
 
     //Quando quiser que o useeffect faça algo quando o componente for desmoantado
     return () => {
-      htmlEl.classList.remove("hero-page")
-    }
-
-  }, [visibleItems])
+      htmlEl.classList.remove("hero-page");
+    };
+  }, [visibleItems]);
 
   // Altera herói Ativo
   // +1 rotaciona no sentido horário
@@ -94,9 +92,14 @@ export default function Carousel({ heroes, activedId }: Iprops) {
           </div>
         </div>
 
-        <div className={styles.details}>
-          <HeroDetails data={heroes[0]} />
-        </div>
+        <motion.div
+          className={styles.details}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 2 }}
+        >
+          <HeroDetails data={visibleItems[enPosition.MIDDLE]} />
+        </motion.div>
       </div>
     </>
   );
