@@ -27,7 +27,11 @@ export default function Carousel({ heroes, activedId }: Iprops) {
     heroes.findIndex((hero) => hero.id === activedId) - 1
   );
 
+  const [startInteractionPosition, setStartInteractionPosition] =
+    useState<number>(0);
+
   const transitionAudio = useMemo(() => new Audio("/songs/transition.mp3"), []);
+
   const voicesAudio: Record<string, HTMLAudioElement> = useMemo(
     () => ({
       "spider-man-616": new Audio("/songs/spider-man-616.mp3"),
@@ -70,17 +74,14 @@ export default function Carousel({ heroes, activedId }: Iprops) {
     };
   }, [visibleItems]);
 
-
-
   useEffect(() => {
-    
     if (!visibleItems) {
       return;
     }
 
     transitionAudio.play();
 
-    const voiceAudio = voicesAudio[visibleItems[enPosition.MIDDLE].id]
+    const voiceAudio = voicesAudio[visibleItems[enPosition.MIDDLE].id];
 
     if (!voiceAudio) {
       return;
@@ -88,9 +89,25 @@ export default function Carousel({ heroes, activedId }: Iprops) {
 
     voiceAudio.volume = 0.3;
     voiceAudio.play();
+  }, [visibleItems, transitionAudio, voicesAudio]);
 
-  }, [visibleItems, transitionAudio, voicesAudio])
-  
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    setStartInteractionPosition(e.clientX);
+  };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!startInteractionPosition) {
+      return null;
+    }
+
+    const endInteractionPosition = e.clientX;
+    const diffPosition = endInteractionPosition - startInteractionPosition;
+
+    //diffPositon > 0 => direita para esquerda
+    //diffPosition< => esquerda para direita
+    const newPosition = diffPosition > 0 ? -1 : 1;
+    handleChangeActiveIndex(newPosition);
+  };
 
   // Altera herói Ativo
   // +1 rotaciona no sentido horário
@@ -109,7 +126,8 @@ export default function Carousel({ heroes, activedId }: Iprops) {
         <div className={styles.carousel}>
           <div
             className={styles.wrapper}
-            onClick={() => handleChangeActiveIndex(1)}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
           >
             <AnimatePresence mode="popLayout">
               {visibleItems.map((item, position) => (
