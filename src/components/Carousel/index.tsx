@@ -40,6 +40,24 @@ export default function Carousel({ heroes, activedId }: Iprops) {
     setVisibleItems(visibleItems);
   }, [heroes, activeIndex]);
 
+
+  useEffect(() => {
+    const htmlEl = document.querySelector("html")
+    if (!htmlEl || !visibleItems) {
+      return;
+    }
+
+    const currentHeroId = visibleItems[enPosition.MIDDLE].id
+    htmlEl.style.backgroundImage = `url("/spiders/${currentHeroId}-background.png")`;
+    htmlEl.classList.add("hero-page");
+
+    //Quando quiser que o useeffect faça algo quando o componente for desmoantado
+    return () => {
+      htmlEl.classList.remove("hero-page")
+    }
+
+  }, [visibleItems])
+
   // Altera herói Ativo
   // +1 rotaciona no sentido horário
   //-1 rotaciona no sentido anti-horário
