@@ -3,7 +3,6 @@ import styles from "./page.module.scss";
 import HeroesList from "@/components/HeroesList";
 import { IHeroData } from "@/interfaces/heroes";
 
-
 async function getHeroes(): Promise<{ data: IHeroData[] }> {
   const res = await fetch(`${process.env.DOMAIN_ORIGIN}/api/heroes`);
   if (!res.ok) {
@@ -15,7 +14,6 @@ async function getHeroes(): Promise<{ data: IHeroData[] }> {
 
 export default async function Home() {
   const heroes = await getHeroes();
-  console.log(heroes);
 
   return (
     <main className={styles.main}>
