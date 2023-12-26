@@ -100,7 +100,23 @@ export default function Carousel({ heroes, activedId }: Iprops) {
       return null;
     }
 
-    const endInteractionPosition = e.clientX;
+    handleChangeDragTouch(e.clientX);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    setStartInteractionPosition(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!startInteractionPosition) {
+      return null;
+    }
+
+    handleChangeDragTouch(e.changedTouches[0].clientX);
+  };
+
+  const handleChangeDragTouch = (clientX: number) => {
+    const endInteractionPosition = clientX;
     const diffPosition = endInteractionPosition - startInteractionPosition;
 
     //diffPositon > 0 => direita para esquerda
@@ -128,6 +144,8 @@ export default function Carousel({ heroes, activedId }: Iprops) {
             className={styles.wrapper}
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             <AnimatePresence mode="popLayout">
               {visibleItems.map((item, position) => (
