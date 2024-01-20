@@ -1,5 +1,5 @@
 export interface IHeroData{
-  id: String;
+  id: string;
   name: string;
   universe: number;
   details: {
